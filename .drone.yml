@@ -641,6 +641,7 @@ pipeline:
       - cd tests/ui-regression
       - npm install
       - ./run-tests.sh
+    shm_size: '1gb'
     when:
       matrix:
         TESTS: acceptance-ui
