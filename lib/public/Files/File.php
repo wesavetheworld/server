@@ -53,8 +53,9 @@ interface File extends Node {
 	 *
 	 * @param string $data
 	 * @throws \OCP\Files\NotPermittedException
-	 * @return void
+	 * @return mixed
 	 * @since 6.0.0
+	 * @since 14.0.0 return added
 	 */
 	public function putContent($data);
 

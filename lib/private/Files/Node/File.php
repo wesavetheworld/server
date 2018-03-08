@@ -57,13 +57,15 @@ class File extends Node implements \OCP\Files\File {
 	/**
 	 * @param string $data
 	 * @throws \OCP\Files\NotPermittedException
+	 * @return mixed
 	 */
 	public function putContent($data) {
 		if ($this->checkPermissions(\OCP\Constants::PERMISSION_UPDATE)) {
 			$this->sendHooks(array('preWrite'));
-			$this->view->file_put_contents($this->path, $data);
+			$result = $this->view->file_put_contents($this->path, $data);
 			$this->fileInfo = null;
 			$this->sendHooks(array('postWrite'));
+			return $result;
 		} else {
 			throw new NotPermittedException();
 		}
