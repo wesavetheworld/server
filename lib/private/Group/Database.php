@@ -56,19 +56,10 @@ class Database extends Backend {
 	/**
 	 * \OC\Group\Database constructor.
 	 *
-	 * @param IDBConnection|null $dbConn
+	 * @param IDBConnection $dbConn
 	 */
-	public function __construct(IDBConnection $dbConn = null) {
+	public function __construct(IDBConnection $dbConn) {
 		$this->dbConn = $dbConn;
-	}
-
-	/**
-	 * FIXME: This function should not be required!
-	 */
-	private function fixDI() {
-		if ($this->dbConn === null) {
-			$this->dbConn = \OC::$server->getDatabaseConnection();
-		}
 	}
 
 	/**
@@ -80,8 +71,6 @@ class Database extends Backend {
 	 * be returned.
 	 */
 	public function createGroup( $gid ) {
-		$this->fixDI();
-
 		// Add group
 		$result = $this->dbConn->insertIfNotExist('*PREFIX*groups', [
 			'gid' => $gid,
@@ -101,8 +90,6 @@ class Database extends Backend {
 	 * Deletes a group and removes it from the group_user-table
 	 */
 	public function deleteGroup( $gid ) {
-		$this->fixDI();
-
 		// Delete the group
 		$qb = $this->dbConn->getQueryBuilder();
 		$qb->delete('groups')
@@ -136,8 +123,6 @@ class Database extends Backend {
 	 * Checks whether the user is member of a group or not.
 	 */
 	public function inGroup( $uid, $gid ) {
-		$this->fixDI();
-
 		// check
 		$qb = $this->dbConn->getQueryBuilder();
 		$cursor = $qb->select('uid')
@@ -161,8 +146,6 @@ class Database extends Backend {
 	 * Adds a user to a group.
 	 */
 	public function addToGroup( $uid, $gid ) {
-		$this->fixDI();
-
 		// No duplicate entries!
 		if( !$this->inGroup( $uid, $gid )) {
 			$qb = $this->dbConn->getQueryBuilder();
@@ -185,8 +168,6 @@ class Database extends Backend {
 	 * removes the user from a group.
 	 */
 	public function removeFromGroup( $uid, $gid ) {
-		$this->fixDI();
-
 		$qb = $this->dbConn->getQueryBuilder();
 		$qb->delete('group_user')
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
@@ -209,8 +190,6 @@ class Database extends Backend {
 		if ($uid === null || $uid === '') {
 			return [];
 		}
-
-		$this->fixDI();
 
 		// No magic!
 		$qb = $this->dbConn->getQueryBuilder();
@@ -269,8 +248,6 @@ class Database extends Backend {
 	 * @return bool
 	 */
 	public function groupExists($gid) {
-		$this->fixDI();
-
 		// Check cache first
 		if (isset($this->groupCache[$gid])) {
 			return true;

@@ -24,6 +24,7 @@
  */
 
 namespace Test\Group;
+use OC\Group\Database;
 
 /**
  * Class Database
@@ -47,7 +48,7 @@ class DatabaseTest extends Backend {
 
 	protected function setUp() {
 		parent::setUp();
-		$this->backend = new \OC\Group\Database();
+		$this->backend = new Database(\OC::$server->getDatabaseConnection());
 	}
 
 	protected function tearDown() {
@@ -62,7 +63,7 @@ class DatabaseTest extends Backend {
 
 		$this->backend->createGroup($group);
 
-		$backend = new \OC\Group\Database();
+		$backend = new Database(\OC::$server->getDatabaseConnection());
 		$this->assertFalse($backend->createGroup($group));
 	}
 }
