@@ -32,6 +32,7 @@ export default {
 						loading: false,
 						collapsible: true,
 						opened: true,
+						classes: ['editing'],
 						undo: {
 							action: "deleteAccount",
 							text: t('settings', 'Deleted Test')
